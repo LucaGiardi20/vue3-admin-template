@@ -1,0 +1,36 @@
+/* theme color */
+// $--color-primary: teal;
+
+/* icon font path, required */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+
+
+/* APPLYING ELEMENT-UI THEME TO SITE */
+
+body {
+  color: $--color-text-primary;
+}
+
+.bg-warning {
+  background: $--color-warning-lighter !important;
+}
+.bg-danger {
+  background: $--color-danger-lighter !important;
+}
+.bg-success {
+  background: $--color-success-light !important;
+}
+.bg-base {
+  background: $--background-color-base !important;
+}
+
+/** OVERRIDES **/
+.el-notification__content {
+  text-align: left;
+}
+
+.el-form--label-top .el-form-item__label {
+  padding-bottom: unset;
+}
