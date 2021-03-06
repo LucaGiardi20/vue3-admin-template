@@ -1,9 +1,11 @@
 <template>
   <section class="app-content">
-    <div class="border rounded- rounded m-auto bg-base flex w-full flex-1">
-      <transition name="fade" mode="out-in">
-        <router-view />
-      </transition>
+    <div class="border rounded- rounded m-auto bg-white flex w-full flex-1 p-4">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
   </section>
 </template>
@@ -17,15 +19,10 @@ export default {
 <style lang="scss" scoped>
 
 .app-content {
-  /*50 = navbar  */
-  min-height: 100vh; //calc(100vh - #{$navbar-height});
-  margin-top: $navbar-height;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+  @apply pl-8 pb-8 pr-8 flex flex-col h-screen w-full relative;
+  padding-top: calc(#{$navbar-height} + 2rem);
   background-color: $background-color;
-  @apply p-8;
-  @apply flex flex-col;
+
 }
 
 .fade-enter-active, .fade-leave-active {

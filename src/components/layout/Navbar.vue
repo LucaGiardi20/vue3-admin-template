@@ -1,38 +1,32 @@
 <template>
-  <div class="navbar fixed">
+  <div class="navbar">
     <div class="navbar-breadcrumb">
       <Breadcrumb />
     </div>
     <div class="navbar-inner">
       <div class="navbar-inner__content">
-        <!--Global search-->
-        <LanguageSelect />
-        <!--Avatar-->
         <el-dropdown
           class="avatar-container ml-2"
           trigger="hover"
           @command="onMenuClick"
         >
-          <el-avatar v-if="user && user.picture" :src="user.picture" />
-          <el-avatar v-else>
-            {{ user ? `${user.name.charAt(0)}${user.surname.charAt(0)}` : null }}
+          <el-avatar>
+            L
           </el-avatar>
           <!--Dropdown Options-->
           <el-dropdown-menu
-            slot="dropdown"
             class="user-dropdown"
           >
             <router-link to="/profile">
               <el-dropdown-item>
-                Profilo
+                Profile
               </el-dropdown-item>
             </router-link>
             <el-dropdown-item command="change-password">
-              Cambia Password
+              Change password
             </el-dropdown-item>
             <el-dropdown-item
               divided
-              @click.native="logout"
             >
               <span style="display:block;">Log Out</span>
             </el-dropdown-item>
@@ -45,64 +39,21 @@
 
 <script>
 import Breadcrumb from "@/components/layout/Breadcrumb";
-import LanguageSelect from "@/components/LanguageSelect";
-import authService from "@/modules/auth/Services/auth.services";
-import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 
 export default {
   name: "Navbar",
   components: {
-    Breadcrumb, LanguageSelect
+    Breadcrumb
   },
-  data() {
-    return {
-      modal: null
-    };
-  },
-  computed: {
-    user() {
-      return this.$store.getters["auth/user"];
-    }
-  },
-  methods: {
-    onMenuClick(command) {
-      if (command === "change-password") {
-        this._changePassword();
-      }
-    },
-    /**
-     * @desc On change password
-     */
-    _changePassword() {
-      this.modal = this.$modal.open("Cambia password", ChangePasswordForm, {}, this._onChangePasswordConfirm);
-    },
-    /**
-     * @desc On change password confirmation
-     */
-    async _onChangePasswordConfirm() {
-      this.isLoading = true;
-      this.modal.startLoading();
+  setup() {
 
-      try {
-        let data = this.modal.getData();
-        await authService.changePassword(this.user.id, data);
-        this.$message.success("Password aggiornata");
-        this.modal.close();
-      } catch (error) {
-        this.$message.error("Si è verificato un errore durante il cambio password!");
-      } finally {
-        this.modal.stopLoading();
-        this.isLoading = false;
-      }
-    },
-    /**
-     * @desc Make logout
-     * @returns {Promise<void>}
-     */
-    async logout() {
-      await authService.logout();
-      this.$router.push("/login");
-    }
+    const onMenuClick = (command) => {
+      console.log(command);
+    };
+
+    return {
+      onMenuClick
+    };
   }
 };
 </script>
@@ -111,51 +62,24 @@ export default {
 
 .navbar {
   height: $navbar-height;
-  @apply overflow-hidden;
-  @apply relative;
-  @apply bg-white;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
-  @apply z-10;
-  @apply w-full;
-  @apply flex;
-  @apply justify-end;
+  width: calc(100% - #{$sidebar-width});
+  @apply overflow-hidden bg-white z-10 flex justify-end fixed top-0 right-0;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   transition: width 0.28s;
 
   &-breadcrumb {
-    @apply m-auto;
-    @apply absolute;
-    @apply content-center;
-    @apply flex;
-    @apply items-center;
-    @apply h-full;
+    @apply m-auto absolute content-center flex items-center h-full;
     left: 1rem;
   }
 
   &-inner {
-    @apply flex;
-    @apply flex-row;
-    @apply relative;
+    @apply flex flex-row relative content-end bg-white border-l;
     padding-left: 1rem;
     padding-right: 1rem;
-    @apply content-end;
-    @apply bg-white;
-    @apply border-l;
 
     &__content {
-      @apply flex;
-      @apply flex-row;
-      @apply w-full;
-      @apply content-end;
-      @apply items-center;
-      @apply bg-white;
+      @apply flex flex-row w-full content-end items-center bg-white;
     }
-  }
-
-  &.fixed {
-    width: calc(100% - #{$sidebar-width});
-    @apply fixed;
-    @apply top-0;
-    @apply right-0;
   }
 }
 </style>

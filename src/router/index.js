@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import authRoutes from "@/modules/auth/routes.js";
 import dashboardRoutes from "@/modules/dashboard/routes.js";
+import nestedRoutes from "@/modules/nested/routes.js";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes: [...authRoutes, ...dashboardRoutes]
+  routes: [...authRoutes, ...dashboardRoutes, ...nestedRoutes]
 });
 
 // Before each route evaluates...

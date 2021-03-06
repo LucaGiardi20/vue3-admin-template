@@ -1,10 +1,10 @@
 <template>
-  <section>Dashboard</section>
+<div>Nested</div>
 </template>
 
 <script>
 export default {
-  name: "dashboard"
+  name: "nested"
 };
 </script>
 

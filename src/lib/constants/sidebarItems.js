@@ -5,28 +5,20 @@ export default [
     route: "/dashboard"
   },
   {
-    label: "Utenti",
+    label: "Nested",
     icon: "el-icon-user",
-    route: "/users"
-  },
-  {
-    label: "Abbonamenti",
-    icon: "el-icon-money",
-    route: "/subscriptions"
-  },
-  {
-    label: "Ricette",
-    icon: "el-icon-tableware",
-    route: "/recipes"
-  },
-  {
-    label: "Ingredienti",
-    icon: "el-icon-apple",
-    route: "/ingredients"
-  },
-  {
-    label: "Intolleranze",
-    icon: "el-icon-document-checked",
-    route: "/intolerances"
+    route: "/nested",
+    children: [
+      {
+        label: "Level 1",
+        icon: "el-icon-menu",
+        route: "/level-1"
+      },
+      {
+        label: "Level 2",
+        icon: "el-icon-menu",
+        route: "/level-2"
+      }
+    ]
   }
 ];

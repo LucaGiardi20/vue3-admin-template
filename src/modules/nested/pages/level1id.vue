@@ -1,10 +1,10 @@
 <template>
-  <section>Dashboard</section>
+<div>Level 1 id:</div>
 </template>
 
 <script>
 export default {
-  name: "dashboard"
+  name: "level1id"
 };
 </script>
 
