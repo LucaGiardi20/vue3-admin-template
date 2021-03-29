@@ -1,8 +1,8 @@
 <template>
-  <div :class="{ collapsed: isCollapsed }" class="sidebar-container">
+  <div :class="{ collapsed: !isSidebarOpened }" class="sidebar-container">
     <!--HAMBURGER-->
     <div class="sidebar-container__header">
-      <p v-if="!isCollapsed" class="cursor-default">
+      <p v-if="isSidebarOpened" class="cursor-default">
         Title
       </p>
       <div
@@ -10,12 +10,12 @@
         @click="onMenuClick"
       >
         <i
-          v-if="isCollapsed"
+          v-if="!isSidebarOpened"
           class="el-icon-s-unfold"
           style="margin-bottom: auto; margin-top: auto"
         />
         <i
-          v-if="!isCollapsed"
+          v-if="isSidebarOpened"
           class="el-icon-s-fold"
           style="margin-bottom: auto; margin-top: auto"
         />
@@ -23,28 +23,22 @@
     </div>
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
-        :default-active="activeMenu"
-        :collapse="isCollapsed"
-        :unique-opened="false"
-        :collapse-transition="false"
-        :default-openeds="openedMenus"
-        background-color="#343756"
-        text-color="#f4f4f4"
-        active-text-color="#718096"
+        class="el-menu-vertical-demo"
         mode="vertical"
+        :default-openeds="openedMenus"
+        :collapse="!isSidebarOpened"
       >
-        <!-- for loop in "filteredMenuSlider"	computed -->
         <template v-for="(item, parentIndex) in menuItems" :key="parentIndex">
-          <!-- PARENT DASHBOARD -->
-          <router-link
+          <!-- PARENT -->
+
+          <el-menu-item
+            @click="onMenuItemClick(item.route)"
             v-if="!item.hasOwnProperty('children')"
-            :to="item.route"
+            :index="parentIndex.toString()"
           >
-            <el-menu-item index="9">
-              <!-- slot="title" -->
-              <span>{{ item.label }}</span>
-            </el-menu-item>
-          </router-link>
+            <i :class="item.icon"></i>
+            <span>{{ item.label }}</span>
+          </el-menu-item>
           <!-- PARENT WITH SUB MENU -->
           <el-submenu
             v-else
@@ -52,21 +46,22 @@
             class="bg-gray-300"
           >
             <!-- PARENT NAME -->
-            <template v-slot:title>
-              <!--slot="title"-->
+            <template #title>
+              <i :class="item.icon"></i>
               <span>{{ item.label }}</span>
             </template>
             <!-- CHILDREN PARENT -->
-            <router-link
+            <el-menu-item-group
               v-for="(child, childIndex) in item.children"
               :key="childIndex"
-              :to="child.route"
-              :class="{
-                'router-link-exact-active router-link-active':
-                  $route.path === child.route
-              }"
             >
-            </router-link>
+              <el-menu-item
+                @click="onMenuItemClick(child.route)"
+                :index="childIndex.toString()"
+              >
+                <span>{{ child.label }}</span>
+              </el-menu-item>
+            </el-menu-item-group>
           </el-submenu>
         </template>
       </el-menu>
@@ -77,19 +72,19 @@
 <script>
 import SidebarItems from "@/lib/constants/sidebarItems";
 import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
   name: "Sidebar",
   setup() {
-
+    const store = useStore();
     const route = useRoute();
+    const router = useRouter();
     const openedMenus = ref([]);
     const menuItems = ref(SidebarItems);
 
-    const isCollapsed = computed(() => {
-      return false; // Add sidebar from store
-    });
+    const isSidebarOpened = computed(() => store.state.sidebarOpened);
 
     const activeMenu = computed(() => {
       const { meta, path } = route;
@@ -104,34 +99,37 @@ export default {
      * @desc On login press
      */
     const onMenuClick = () => {
-      this.$store.commit("auth/TOGGLE_SIDEBAR");
+      store.commit("app/toggleSidebar");
+    };
+
+    /**
+     * @desc On menu item click
+     */
+    const onMenuItemClick = routePath => {
+      router.push({
+        path: routePath
+      });
     };
 
     return {
       openedMenus,
       menuItems,
-      isCollapsed,
+      isSidebarOpened,
       activeMenu,
-      onMenuClick
+      onMenuClick,
+      onMenuItemClick
     };
   }
 };
 </script>
 
 <style lang="scss" scoped>
-
 .sidebar-container {
   transition: width 0.28s;
   width: $sidebar-width;
   background-color: $sidebar-background-color;
-  height: 100%;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  @apply h-full fixed top-0 bottom-0 left-0 overflow-hidden z-50 shadow;
   z-index: 1001;
-  overflow: hidden;
-  color: #909399;
 
   &.collapsed {
     .sidebar-container__header {
@@ -141,65 +139,27 @@ export default {
 
   &__header {
     height: $navbar-height;
-    display: flex;
-    align-items: center;
-    padding: 0.75rem;
-    justify-content: space-between;
-    width: 100%;
+    @apply flex items-center justify-between p-3 w-full;
   }
 
   .scrollbar-wrapper {
-    overflow-x: hidden;
+    @apply overflow-hidden;
   }
 
-  & ::v-deep .el-scrollbar__view {
-    height: 100%;
+  & ::v-deep(.el-scrollbar__view) {
+    @apply h-full;
   }
 
-  & ::v-deep .el-scrollbar__bar.is-vertical {
-    right: 0;
+  & ::v-deep(.el-scrollbar__bar.is-vertical) {
+    @apply right-0;
   }
 
   .is-horizontal {
-    display: none;
+    @apply hidden;
   }
 
-  & ::v-deep .el-scrollbar {
-    height: 100%;
+  & ::v-deep(.el-scrollbar) {
+    @apply h-full;
   }
-
-  & ::v-deep .el-menu {
-    border: none;
-    height: 100%;
-    width: 100%;
-
-    .el-submenu {
-      .el-menu-item {
-        /*height: 37px;*/
-        height: 30px;
-        line-height: 30px;
-      }
-    }
-  }
-}
-
-.icon-badge {
-  position: absolute;
-  top: 17px;
-  left: 35px;
-  width: 10px;
-  height: 10px;
-  background-color: #f56c6c;
-  /*border: solid white 1px;*/
-}
-
-.item-badge {
-  line-height: 0px;
-  padding-right: 24px;
-  background-color: #409eff;
-}
-
-.input-sidebar {
-  margin: 0 -5px 0 -4px;
 }
 </style>

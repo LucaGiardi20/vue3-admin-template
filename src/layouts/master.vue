@@ -1,6 +1,6 @@
 <template>
   <!--Main-->
-  <div id="master">
+  <div id="master" :class="sidebarClasses">
     <!--Sidebar-->
     <Sidebar />
     <!--Main Container-->
@@ -17,10 +17,26 @@
 import Sidebar from "@/components/layout/Sidebar";
 import AppContent from "@/components/layout/AppContent";
 import Navbar from "@/components/layout/Navbar";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "master",
-  components: { Navbar, AppContent, Sidebar }
+  components: { Navbar, AppContent, Sidebar },
+  setup() {
+
+    const store = useStore();
+
+    const sidebarClasses = computed(() => {
+      return {
+        "sidebar-collapsed": !store.state.sidebarOpened
+      };
+    });
+
+    return {
+      sidebarClasses
+    };
+  }
 };
 </script>
 
@@ -46,7 +62,7 @@ export default {
     .main-container {
       margin-left: $sidebar-width-collapsed;
 
-      .navbar.fixed {
+      .navbar {
         width: calc(100% - #{$sidebar-width-collapsed});
       }
     }

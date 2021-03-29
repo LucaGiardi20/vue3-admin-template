@@ -12,12 +12,12 @@ export default [
       {
         label: "Level 1",
         icon: "el-icon-menu",
-        route: "/level-1"
+        route: "/nested/level-1"
       },
       {
         label: "Level 2",
         icon: "el-icon-menu",
-        route: "/level-2"
+        route: "/nested/level-2"
       }
     ]
   }

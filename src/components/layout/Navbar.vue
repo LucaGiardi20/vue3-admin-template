@@ -14,23 +14,25 @@
             L
           </el-avatar>
           <!--Dropdown Options-->
-          <el-dropdown-menu
-            class="user-dropdown"
-          >
-            <router-link to="/profile">
-              <el-dropdown-item>
-                Profile
-              </el-dropdown-item>
-            </router-link>
-            <el-dropdown-item command="change-password">
-              Change password
-            </el-dropdown-item>
-            <el-dropdown-item
-              divided
+          <template #dropdown>
+            <el-dropdown-menu
+              class="user-dropdown"
             >
-              <span style="display:block;">Log Out</span>
-            </el-dropdown-item>
-          </el-dropdown-menu>
+              <router-link to="/profile">
+                <el-dropdown-item>
+                  Profile
+                </el-dropdown-item>
+              </router-link>
+              <el-dropdown-item command="change-password">
+                Change password
+              </el-dropdown-item>
+              <el-dropdown-item
+                divided
+              >
+                <span style="display:block;">Log Out</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
         </el-dropdown>
       </div>
     </div>
@@ -63,8 +65,7 @@ export default {
 .navbar {
   height: $navbar-height;
   width: calc(100% - #{$sidebar-width});
-  @apply overflow-hidden bg-white z-10 flex justify-end fixed top-0 right-0;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  @apply overflow-hidden bg-white z-10 flex justify-end fixed top-0 right-0 shadow;
   transition: width 0.28s;
 
   &-breadcrumb {
