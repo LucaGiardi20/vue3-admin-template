@@ -15,9 +15,6 @@ const actions = {
   resetState({ commit }) {
     commit("resetState");
   },
-  toggleSidebar({ commit }) {
-    commit("toggleSidebar");
-  }
 };
 
 // mutations

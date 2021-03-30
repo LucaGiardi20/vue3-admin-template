@@ -29,7 +29,7 @@ export default {
 
     const sidebarClasses = computed(() => {
       return {
-        "sidebar-collapsed": !store.state.sidebarOpened
+        "sidebar-collapsed": !store.state.app.sidebarOpened
       };
     });
 

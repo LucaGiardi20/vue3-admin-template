@@ -84,7 +84,7 @@ export default {
     const openedMenus = ref([]);
     const menuItems = ref(SidebarItems);
 
-    const isSidebarOpened = computed(() => store.state.sidebarOpened);
+    const isSidebarOpened = computed(() => store.state.app.sidebarOpened);
 
     const activeMenu = computed(() => {
       const { meta, path } = route;

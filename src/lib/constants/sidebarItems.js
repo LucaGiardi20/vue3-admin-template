@@ -14,11 +14,6 @@ export default [
         icon: "el-icon-menu",
         route: "/nested/level-1"
       },
-      {
-        label: "Level 2",
-        icon: "el-icon-menu",
-        route: "/nested/level-2"
-      }
     ]
   }
 ];
